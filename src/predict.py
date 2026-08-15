@@ -2,19 +2,12 @@ from PIL import Image
 
 import torch
 import torch.nn.functional as F
-from torchvision import transforms
 
 from src.model import FoodClassifierCNN
 from src.config import MODEL_PATH, IMAGE_SIZE, CLASS_NAMES
 
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
-
-transform = transforms.Compose([
-    transforms.Resize(IMAGE_SIZE),
-    transforms.ToTensor()
-])
-
 
 model = FoodClassifierCNN().to(device)
 
@@ -25,9 +18,10 @@ model.eval()
 
 def predict(image):
 
-    image = image.convert("RGB")
-
-    image = transform(image)
+    image = image.convert("RGB").resize(IMAGE_SIZE)
+    image = torch.frombuffer(bytearray(image.tobytes()), dtype=torch.uint8)
+    image = image.float().view(IMAGE_SIZE[1], IMAGE_SIZE[0], 3)
+    image = image.permute(2, 0, 1) / 255.0
 
     image = image.unsqueeze(0).to(device)
 
