@@ -1,4 +1,5 @@
 import gradio as gr
+import os
 from PIL import Image
 
 from src.predict import predict
@@ -26,4 +27,7 @@ Built using PyTorch + Gradio.
 )
 
 if __name__ == "__main__":
-    demo.launch()
+    demo.launch(
+        server_name=os.getenv("HOST", "0.0.0.0"),
+        server_port=int(os.getenv("PORT", "7860")),
+    )
