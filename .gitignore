@@ -5,9 +5,6 @@ __pycache__/
 # Jupyter
 .ipynb_checkpoints/
 
-# Training data is not needed for deployment
-data/
-
 # Virtual environments
 venv/
 .env
